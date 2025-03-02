@@ -1,7 +1,8 @@
+import jdk.jfr.Name;
+
 import java.util.Scanner;
 
 public class Main {
-
 
     public static void printMenuPrincipal() {
         System.out.println("\nMenuPrincipal");
@@ -14,7 +15,7 @@ public class Main {
         System.out.println("\nMenú de Gestió de productes");
         System.out.println(" 1. Afegir");
         System.out.println(" 2. Eliminar");
-        System.out.println(" 3. Salir");
+        System.out.println(" 3. Llistar productes");
         System.out.println(" 9. Tornar");
     }
 
@@ -27,30 +28,45 @@ public class Main {
     }
 
 
+    public static int readOption(Scanner input) {
+        return input.nextInt();
+    }
 
+    public static int mainMenuHandler(int option , Scanner input ,String[] names , int[] Stockes , int numProduct) {
+        switch (option) {
+            case 1:
+                gestionProMenu(input);
+                return 0;
+            case 2:
+                printMenuGestioComp();
+                return 0;
+            case 9:
+                return 9;
+            default:
+                System.out.println("Opcion no valida");
+                return 0;
+        }
+    }
 
+    public static void gestionProMenu(Scanner input) {
+        int option = 0 ;
+        while (option != 9) {
+            printMenuGestioPro();
+            option = readOption(input);
+            //gestionMenuHandler(option);
+        }
+    }
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        printMenuPrincipal();
-        int opcion = input.nextInt();
-        while (opcion != 9) {
-            switch (opcion) {
-                case 1:
-                    printMenuGestioPro();
-                    opcion = 9;
-                    break;
-                case 2:
-                    printMenuGestioComp();
-                    opcion = 9;
-                    break;
-                default:
-                    System.out.println("Opcion no valida");
-                    opcion = input.nextInt();
-                    break;
-            }
-
+        String[] names = new String[100];
+        int[] stocks = new int[100];
+        int numProducts = 0;
+        int option = 0;
+        while (option != 9) {
+            printMenuPrincipal();
+            option = readOption(input);
+            numProducts = mainMenuHandler(option , input , names , stocks , numProducts);
         }
-
     }
 }
