@@ -1,37 +1,26 @@
 import java.util.Scanner;
 
+/**
+ * 14/03/2025
+ * @author Arshan_Hz <p><p/>
+ * Refer to <a href="https://github.com/N0Arxan/JavaProductManager">GitHub</a>
+ */
 public class Main {
+
     /**
-     * Los siguientes métodos se encargan de imprimir los menús de la aplicación (parte visual):
-     * - Menú principal
-     * - Menú de gestión de productos
-     * - Menú de gestión de compras y ventas
+     * Método genérico para imprimir un menú.
+     * @param header Título del menú.
+     * @param options Opciones del menú.
      */
-    public static void printMenuPrincipal() {
-        System.out.println("\nMenú principal");
-        System.out.println(" 1. Gestió de productes");
-        System.out.println(" 2. Gestió de compres i vendes");
-        System.out.println(" 9. Acabar");
-    }
-
-    public static void printMenuGestioPro() {
-        System.out.println("\nMenú de gestió de productes");
-        System.out.println(" 1. Afegir");
-        System.out.println(" 2. Eliminar");
-        System.out.println(" 3. Llistar productes");
-        System.out.println(" 9. Tornar");
-    }
-
-    public static void printMenuGestioComp() {
-        System.out.println("\nMenú de gestió de compres i vendes");
-        System.out.println(" 1. Compra");
-        System.out.println(" 2. Venda");
-        System.out.println(" 3. Llistar estocs");
-        System.out.println(" 9. Tornar");
+    public static void printMenu(String header, String[] options) {
+        System.out.println("\n" + header);
+        for (String option : options) {
+            System.out.println(option);
+        }
     }
 
     /**
-     * Lee la opción ingresada por el usuario desde el teclado en cada menú.
+     * Lee la opción ingresada por el usuario desde el teclado.
      * @param input Objeto Scanner para leer la entrada del usuario.
      * @return Un entero que representa la opción ingresada.
      */
@@ -41,8 +30,8 @@ public class Main {
     }
 
     /**
-     * Recorre la lista de stocks para encontrar el valor -1, que actúa como sentinela.
-     * @param productStock Array de enteros que representa los stocks de los productos.
+     * Recorre el array de stocks para encontrar la posición del valor sentinela (-1).
+     * @param productStock Array de enteros que representa el stock de cada producto.
      * @return El índice donde se encontró el valor sentinela (posición del último producto + 1).
      */
     public static int findLastProduct(int[] productStock) {
@@ -55,7 +44,7 @@ public class Main {
     }
 
     /**
-     * Verifica si el número proporcionado es 0, lo que indica que la operación fue cancelada.
+     * Verifica si la entrada del usuario es 0, lo que indica que la operación fue cancelada.
      * @param number Número ingresado por el usuario.
      * @return true si el número es 0, false en caso contrario.
      */
@@ -64,33 +53,33 @@ public class Main {
     }
 
     /**
-     * Controla la funcionalidad del menú principal. El programa permanecerá en este bucle
-     * hasta que el usuario ingrese el número 9. La entrada del usuario se maneja mediante un handler.
+     * Controla la funcionalidad del menú principal.
+     * Permanece en el bucle hasta que el usuario ingrese el número 9.
      */
     public static void mainMenu(Scanner input, String[] names, int[] stocks){
         int option = 0;
         while (option != 9) {
-            printMenuPrincipal();
+            printMenu("Menú principal", new String[] {
+                " 1. Gestió de productes",
+                " 2. Gestió de compres i vendes",
+                " 9. Acabar"
+            });
             option = readOption(input);
             option = mainMenuHandler(option, input, names, stocks);
         }
     }
+
     /**
-     * Maneja la opción ingresada en el menú principal. Si el usuario selecciona una opción válida,
-     * se dirige al menú correspondiente. Al retornar, actualiza la variable 'option' para continuar o salir del bucle.
-     * @param option Opción seleccionada por el usuario.
-     * @param input Objeto Scanner para leer la entrada del usuario.
-     * @param names Array de nombres de productos.
-     * @param Stockes Array de stocks de productos.
+     * Maneja la opción ingresada en el menú principal y dirige al usuario al submenú correspondiente.
      * @return La opción actualizada basada en la entrada del usuario.
      */
-    public static int mainMenuHandler(int option, Scanner input, String[] names, int[] Stockes) {
+    public static int mainMenuHandler(int option, Scanner input, String[] names, int[] stocks) {
         switch (option) {
             case 1:
-                gestionProMenu(input, names, Stockes);
+                gestionProMenu(input, names, stocks);
                 return 0;
             case 2:
-                gestionVentaMenu(input, names, Stockes);
+                gestionVentaMenu(input, names, stocks);
                 return 0;
             case 9:
                 return 9;
@@ -101,45 +90,41 @@ public class Main {
     }
 
     /**
-     * Controla el menú de gestión de productos. El programa permanecerá en este bucle
-     * hasta que el usuario ingrese el número 9, momento en el cual se regresa al menú principal.
-     * La entrada del usuario se maneja mediante un handler.
+     * Controla el menú de gestión de productos.
+     * Permanece en el bucle hasta que el usuario ingrese el número 9, volviendo al menú principal.
      */
-    public static void gestionProMenu(Scanner input, String[] names, int[] Stockes) {
+    public static void gestionProMenu(Scanner input, String[] names, int[] stocks) {
         int option = 0;
         while (option != 9) {
-            printMenuGestioPro();
+            printMenu("Menú de gestió de productes", new String[] {
+                " 1. Afegir",
+                " 2. Eliminar",
+                " 3. Llistar productes",
+                " 9. Tornar"
+            });
             option = readOption(input);
-            option = gestionProMenuHandler(option, names, Stockes, input);
+            option = gestionProMenuHandler(option, names, stocks, input);
         }
     }
 
     /**
-     * Maneja la opción ingresada en el menú de gestión de productos. Si el usuario selecciona una opción válida,
-     * se dirige a la funcionalidad correspondiente. Si la entrada es inválida o el usuario ingresa 9,
-     * se actualiza la variable 'option' para determinar si se continúa o se sale del bucle.
-     * @param option Opción seleccionada por el usuario.
-     * @param names Array de nombres de productos.
-     * @param Stockes Array de stocks de productos.
-     * @param input Objeto Scanner para leer la entrada del usuario.
+     * Maneja la opción ingresada en el menú de gestión de productos.
      * @return La opción actualizada basada en la entrada del usuario.
      */
-    public static int gestionProMenuHandler(int option, String[] names, int[] Stockes, Scanner input) {
+    public static int gestionProMenuHandler(int option, String[] names, int[] stocks, Scanner input) {
         switch (option) {
             case 1:
-                addProduct(names, Stockes, input);
+                addProduct(names, stocks, input);
                 return 0;
             case 2:
-                removeProduct(names, Stockes, input);
+                removeProduct(names, stocks, input);
                 return 0;
             case 3:
                 printProNames(names);
                 return 0;
             case 9:
-                // Volver al menú anterior
                 return 9;
             default:
-                // Mantener el bucle
                 System.out.println("\nOpció no vàlida");
                 return 0;
         }
@@ -147,9 +132,8 @@ public class Main {
 
     /**
      * Agrega un nuevo producto a la lista.
-     * Se consulta la posición del último producto (identificada por el valor -1, sentinela),
-     * se inserta el nuevo producto en esa posición y se inicializa su stock a 0.
-     * Finalmente, se mueve la sentinela a la siguiente posición para futuras inserciones.
+     * Se consulta la posición del último producto (valor sentinela -1), se inserta el nuevo producto
+     * en esa posición y se inicializa su stock a 0. Luego, se desplaza el valor sentinela a la siguiente posición.
      */
     public static void addProduct(String[] productNames, int[] productStock, Scanner input) {
         input.nextLine(); // Consumir la línea sobrante del menú anterior
@@ -163,25 +147,15 @@ public class Main {
         System.out.println("\nProducte " + name + " afegit amb èxit");
     }
 
-
     /**
      * Elimina un producto de la lista basado en la posición ingresada por el usuario
-     * (se resta 1 para obtener el índice correcto).
-     * Verifica que el índice sea válido y que la operación no haya sido cancelada.
-     *
-     * <p>Posteriormente, a partir del índice indicado, cada elemento se desplaza una posición hacia la izquierda,
-     * y se elimina el último elemento de ambos arrays.</p>
-     *
-     * <p>Ejemplo: para eliminar el producto en la posición 1 de la lista:</p>
-     * <p>[1,2,3,4,-1,0,0,0,0]  -- valor inicial</p>
-     * <p>Primer paso: [1,3,4,-1,-1,0,0,0,0]</p>
-     * <p>Segundo paso (eliminar el último): [1,3,4,-1,0,0,0,0,0]</p>
-     *
+     * (se resta 1 para obtener el índice correcto). Verifica que la posición sea válida y que la operación
+     * no haya sido cancelada. Luego, desplaza los elementos restantes y elimina el producto.
      */
     public static void removeProduct(String[] productNames, int[] productStock, Scanner input) {
         System.out.print("Introdueix la posició del producte (per cancel·lar -> 0): ");
         int pos = input.nextInt() - 1;
-        if (isCanceled(pos+1)) {
+        if (isCanceled(pos + 1)) {
             System.out.println("\nOperació cancel·lada");
             return;
         }
@@ -191,7 +165,7 @@ public class Main {
             return;
         }
 
-        String productName = productNames[pos]; // Guardar el valor antes de borrar para imprimir después
+        String productName = productNames[pos]; // Guardar el valor antes de borrar
 
         for (int i = pos; i < lastIndex; i++) {
             productNames[i] = productNames[i + 1];
@@ -204,8 +178,7 @@ public class Main {
     }
 
     /**
-     * Imprime en pantalla la lista de nombres de productos hasta encontrar un elemento nulo,
-     * lo que indica el final de la lista. Si no se encuentra ningún producto, muestra "Inventari buit".
+     * Imprime la lista de nombres de productos. Si no hay productos, muestra "Inventari buit".
      */
     public static void printProNames(String[] productNames) {
         int contador = 0;
@@ -223,41 +196,38 @@ public class Main {
         }
     }
 
-
     /**
-     * Controla el menú de gestión de compres i vendes. El programa permanecerá en este bucle
-     * hasta que el usuario ingrese el número 9, momento en el cual se regresa al menú principal.
-     * La entrada del usuario se maneja mediante un handler.
+     * Controla el menú de gestión de compres i vendes.
+     * Permanece en el bucle hasta que el usuario ingrese el número 9, volviendo al menú principal.
      */
-    public static void gestionVentaMenu(Scanner input, String[] names, int[] Stockes) {
+    public static void gestionVentaMenu(Scanner input, String[] names, int[] stocks) {
         int option = 0;
         while (option != 9) {
-            printMenuGestioComp();
+            printMenu("Menú de gestió de compres i vendes", new String[] {
+                " 1. Compra",
+                " 2. Venda",
+                " 3. Llistar estocs",
+                " 9. Tornar"
+            });
             option = readOption(input);
-            option = gestionVentaMenuHandler(option, names, Stockes, input);
+            option = gestionVentaMenuHandler(option, names, stocks, input);
         }
     }
 
     /**
-     * Maneja la opción ingresada en el menú de gestión de compres i vendes. Si el usuario selecciona una opción válida,
-     * se dirige a la funcionalidad correspondiente. Si la entrada es inválida o el usuario ingresa 9,
-     * se actualiza la variable 'option' para determinar si se continúa o se sale del bucle.
-     * @param option Opción seleccionada por el usuario.
-     * @param names Array de nombres de productos.
-     * @param Stockes Array de stocks de productos.
-     * @param input Objeto Scanner para leer la entrada del usuario.
+     * Maneja la opción ingresada en el menú de gestión de compres i vendes.
      * @return La opción actualizada basada en la entrada del usuario.
      */
-    public static int gestionVentaMenuHandler(int option, String[] names, int[] Stockes, Scanner input) {
+    public static int gestionVentaMenuHandler(int option, String[] names, int[] stocks, Scanner input) {
         switch (option) {
             case 1:
-                addStock(names, Stockes, input);
+                addStock(names, stocks, input);
                 return 0;
             case 2:
-                removeStock(names, Stockes, input);
+                removeStock(names, stocks, input);
                 return 0;
             case 3:
-                printProStockes(Stockes);
+                printProStockes(stocks);
                 return 0;
             case 9:
                 return 9;
@@ -268,17 +238,12 @@ public class Main {
     }
 
     /**
-     * Permite comprar productos, es decir, incrementar la cantidad en stock de un producto.
-     * Se solicita la posición del producto (se resta 1 para obtener el índice correcto), se verifica que el producto exista
-     * y que la operación no haya sido cancelada.
-     *
-     * <p>Se suma la cantidad especificada al stock actual del producto en el array correspondiente.</p>
-     *
+     * Permite incrementar el stock de un producto (compra).
      */
     public static void addStock(String[] productNames, int[] productStock, Scanner input) {
         System.out.print("Introdueix la posició del producte (per cancel·lar -> 0): ");
         int pos = input.nextInt() - 1;
-        if (isCanceled(pos+1)) {
+        if (isCanceled(pos + 1)) {
             System.out.println("\nOperació cancel·lada");
             return;
         }
@@ -293,18 +258,12 @@ public class Main {
     }
 
     /**
-     * Permite vender productos, es decir, restar una cantidad del stock de un producto.
-     * Se solicita la posición del producto (se resta 1 para obtener el índice correcto), y se verifica que el producto exista,
-     * que su stock sea mayor que 0 y que la operación no haya sido cancelada. Además, se comprueba que la cantidad a vender
-     * no exceda el stock disponible.
-     *
-     * <p>Si es correcto hasta aqui, se resta la cantidad especificada del stock actual del producto en el array correspondiente.</p>
-     *
+     * Permite disminuir el stock de un producto (venta).
      */
     public static void removeStock(String[] productNames, int[] productStock, Scanner input) {
         System.out.print("Introdueix la posició del producte (per cancel·lar -> 0): ");
         int pos = input.nextInt() - 1;
-        if (isCanceled(pos+1)) {
+        if (isCanceled(pos + 1)) {
             System.out.println("\nOperació cancel·lada");
             return;
         }
@@ -324,8 +283,8 @@ public class Main {
     }
 
     /**
-     * Imprime en pantalla la cantidad de productos (stock) para cada producto hasta encontrar la sentinela (-1).
-     * Si no hay productos registrados, muestra "Inventari buit".
+     * Imprime la cantidad de productos (stock) hasta encontrar el valor sentinela (-1).
+     * Si no hay productos, muestra "Inventari buit".
      */
     public static void printProStockes(int[] productStock) {
         int contador = 0;
@@ -347,12 +306,11 @@ public class Main {
      * Método principal que inicializa las variables y arranca el programa.
      */
     public static void main(String[] args) {
-        // Inicializar
         Scanner input = new Scanner(System.in);
-        String[] names = new String[100]; // Lista de nombres de productos (máximo 99)
-        int[] stocks = new int[100]; // Lista de stocks de productos (máximo 99)
+        String[] names = new String[100];  // Lista de nombres de productos (máximo 99)
+        int[] stocks = new int[100];         // Lista de stocks de productos (máximo 99)
         stocks[0] = -1; // Valor sentinela para indicar el final de la lista de productos
 
-        mainMenu(input, names, stocks); // Iniciar el programa ejecutando el bucle del menú principal
+        mainMenu(input, names, stocks);
     }
 }
